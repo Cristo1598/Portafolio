@@ -1,0 +1,61 @@
+# Reporte de Verificación de Persistencia e Integridad de Datos (SQL)
+
+**Autor:** Cristo Solís Jiménez
+**Herramienta:** DB Browser for SQLite
+**Base de datos:** `practica_qa.db` (tablas `usuarios` y `pedidos`)
+**Objetivo:** Elaborar y ejecutar scripts de consulta en SQL (SELECT, WHERE, GROUP BY) para verificar la persistencia e integridad de datos en BD.
+
+---
+
+## Resumen ejecutivo
+
+Se diseñaron y ejecutaron 3 scripts de verificación sobre una base de datos relacional de prueba, aplicando las cláusulas `SELECT`, `WHERE` y `GROUP BY`. Se identificaron 2 inconsistencias de datos y se confirmó la ausencia de duplicados en un campo crítico.
+
+---
+
+## Verificación 1: Valores de negocio inválidos (precio)
+
+**Consulta utilizada:**
+```sql
+SELECT * FROM pedidos WHERE precio <= 0;
+```
+
+**Resultado:** 1 fila encontrada
+**Detalle:** Pedido `id=7` ("Cargador") registra un precio de **-10.00**, un valor no válido para una transacción comercial.
+**Severidad:** Media-Alta.
+
+---
+
+## Verificación 2: Valores fuera de dominio permitido (estado)
+
+**Consulta utilizada:**
+```sql
+SELECT * FROM pedidos
+WHERE estado NOT IN ('entregado', 'pendiente', 'cancelado');
+```
+
+**Resultado:** 1 fila encontrada
+**Detalle:** Pedido `id=8` ("Funda") tiene el estado `"entregaddo"` (error tipográfico), fuera de los 3 valores válidos del dominio esperado.
+**Severidad:** Media.
+
+---
+
+## Verificación 3: Registros duplicados (email de usuario)
+
+**Consulta utilizada:**
+```sql
+SELECT email, COUNT(*) as cantidad
+FROM usuarios
+GROUP BY email
+HAVING COUNT(*) > 1;
+```
+
+**Resultado:** 0 filas encontradas
+**Detalle:** No se detectaron correos electrónicos duplicados entre los usuarios registrados. Verificación satisfactoria.
+**Severidad:** N/A (sin hallazgo).
+
+---
+
+## Conclusión
+
+Mediante el uso de `SELECT`, `WHERE` y `GROUP BY` se verificó la persistencia e integridad de los datos almacenados, detectando 2 inconsistencias (precio inválido y estado fuera de dominio) y confirmando la correcta unicidad de registros de usuario por email.
