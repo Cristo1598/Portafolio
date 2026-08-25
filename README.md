@@ -34,8 +34,5 @@ Elaboración y ejecución de scripts de consulta en SQL (SELECT, WHERE, GROUP BY
 
 Postman · Jira · DB Browser for SQLite · Git / GitHub
 
----
 
-## 📌 En progreso
 
-- Certificación ISTQB Foundation Level
